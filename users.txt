@@ -1,0 +1,2 @@
+KAH SEANG,abc,patient,0617
+KANG,abc,doctor,0706
