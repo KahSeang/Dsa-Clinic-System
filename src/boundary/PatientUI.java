@@ -63,20 +63,29 @@ public class PatientUI {
         String id = sc.nextLine();
         System.out.print("Name: ");
         String name = sc.nextLine();
-        System.out.print("Gender: ");
+        System.out.print("Gender (Male/Female): ");
         String gender = sc.nextLine();
-        System.out.print("Age: ");
-        int age = Integer.parseInt(sc.nextLine());
-        System.out.print("Phone: ");
+        int age;
+        while (true) {
+            try {
+                System.out.print("Age: ");
+                age = Integer.parseInt(sc.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number for age.");
+            }
+        }
+        System.out.print("Phone (digits only): ");
         String phone = sc.nextLine();
         System.out.print("Address: ");
         String address = sc.nextLine();
         System.out.print("Allergies (semicolon separated): ");
-        String[] allergyArr = sc.nextLine().split(";");
+        String input = sc.nextLine();
+        String[] allergyArr = input.isEmpty() ? new String[0] : input.split(";");
         adt.List<String> allergies = new adt.List<>();
         for (String a : allergyArr) allergies.add(a);
         boolean success = control.registerPatient(id, name, gender, age, phone, address, allergies);
-        System.out.println(success ? "Patient registered." : "Patient ID already exists.");
+        System.out.println(success ? "Patient registered." : "Invalid data or Patient ID already exists.");
     }
 
     private void updatePatient() {

@@ -42,14 +42,14 @@ public class ConsultationUI {
         String patientId = sc.nextLine();
         System.out.print("Doctor ID: ");
         String doctorId = sc.nextLine();
-        System.out.print("Date: ");
+        System.out.print("Date (YYYY-MM-DD): ");
         String date = sc.nextLine();
         System.out.print("Diagnosis: ");
         String diagnosis = sc.nextLine();
         System.out.print("Notes: ");
         String notes = sc.nextLine();
         boolean success = control.addConsultation(id, patientId, doctorId, date, diagnosis, notes);
-        System.out.println(success ? "Consultation added." : "Consultation ID already exists.");
+        System.out.println(success ? "Consultation added." : "Invalid data or ID already exists.");
     }
 
     private void updateConsultation() {

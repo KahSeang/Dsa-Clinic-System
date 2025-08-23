@@ -38,7 +38,11 @@ public class DoctorControl {
     }
 
     public boolean addDoctor(String id, String name, String specialization, String phone, String schedule) {
-        if (getDoctorById(id) != null) return false;
+        if (!isNonEmpty(id) || getDoctorById(id) != null) return false;
+        if (!isNonEmpty(name)) return false;
+        if (!isNonEmpty(specialization)) return false;
+        if (!isValidPhone(phone)) return false;
+        if (!isNonEmpty(schedule)) return false;
         doctors.add(new Doctor(id, name, specialization, phone, schedule));
         saveDoctors();
         return true;
@@ -96,5 +100,16 @@ public class DoctorControl {
             if (doctors.get(i).getPhone().equals(phone)) result.add(doctors.get(i));
         }
         return result;
+    }
+
+    // Validation helpers
+    private boolean isNonEmpty(String s) { return s != null && !s.trim().isEmpty(); }
+    private boolean isValidPhone(String phone) {
+        if (!isNonEmpty(phone)) return false;
+        for (int i = 0; i < phone.length(); i++) {
+            char c = phone.charAt(i);
+            if (!(c >= '0' && c <= '9')) return false;
+        }
+        return phone.length() >= 8 && phone.length() <= 15;
     }
 } 

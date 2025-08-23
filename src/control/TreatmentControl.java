@@ -7,6 +7,7 @@ import util.FileIO;
 public class TreatmentControl {
     private static final String TREATMENT_FILE = "treatments.txt";
     private List<Treatment> treatments;
+    private final ConsultationControl consultationControl = new ConsultationControl();
 
     public TreatmentControl() {
         treatments = loadTreatments();
@@ -20,7 +21,7 @@ public class TreatmentControl {
                 list.add(Treatment.fromFileString(lines.get(i)));
             }
         } catch (Exception e) {
-            // File may not exist yet
+            // File  not exist gok
         }
         return list;
     }
@@ -38,7 +39,9 @@ public class TreatmentControl {
     }
 
     public boolean addTreatment(String id, String consultationId, String treatmentDetails, String medicineList) {
-        if (getTreatmentById(id) != null) return false;
+        if (!isNonEmpty(id) || getTreatmentById(id) != null) return false;
+        if (!isNonEmpty(consultationId) || consultationControl.getConsultationById(consultationId) == null) return false;
+        if (!isNonEmpty(treatmentDetails)) return false;
         treatments.add(new Treatment(id, consultationId, treatmentDetails, medicineList));
         saveTreatments();
         return true;
@@ -89,4 +92,6 @@ public class TreatmentControl {
     public int countTreatments() {
         return treatments.size();
     }
+
+    private boolean isNonEmpty(String s) { return s != null && !s.trim().isEmpty(); }
 } 

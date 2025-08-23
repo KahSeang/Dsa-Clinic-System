@@ -43,7 +43,13 @@ public class PatientControl {
     }
 
     public boolean registerPatient(String id, String name, String gender, int age, String phone, String address, List<String> allergies) {
+        if (!isValidId(id)) return false;
         if (getPatientById(id) != null) return false;
+        if (!isNonEmpty(name)) return false;
+        if (!isValidGender(gender)) return false;
+        if (!isValidAge(age)) return false;
+        if (!isValidPhone(phone)) return false;
+        if (!isNonEmpty(address)) return false;
         Patient p = new Patient(id, name, gender, age, phone, address);
         p.setAllergies(allergies);
         patients.add(p);
@@ -123,5 +129,23 @@ public class PatientControl {
 
     public boolean isQueueEmpty() {
         return patientQueue.isEmpty();
+    }
+
+    // Validation helpers
+    private boolean isNonEmpty(String s) { return s != null && !s.trim().isEmpty(); }
+    private boolean isValidId(String s) { return isNonEmpty(s); }
+    private boolean isValidGender(String s) {
+        if (!isNonEmpty(s)) return false;
+        String g = s.trim().toLowerCase();
+        return g.equals("m") || g.equals("f") || g.equals("male") || g.equals("female");
+    }
+    private boolean isValidAge(int age) { return age >= 0 && age <= 120; }
+    private boolean isValidPhone(String phone) {
+        if (!isNonEmpty(phone)) return false;
+        for (int i = 0; i < phone.length(); i++) {
+            char c = phone.charAt(i);
+            if (!(c >= '0' && c <= '9')) return false;
+        }
+        return phone.length() >= 8 && phone.length() <= 15;
     }
 }

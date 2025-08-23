@@ -7,6 +7,8 @@ import util.FileIO;
 public class ConsultationControl {
     private static final String CONSULTATION_FILE = "consultations.txt";
     private List<Consultation> consultations;
+    private final PatientControl patientControl = new PatientControl();
+    private final DoctorControl doctorControl = new DoctorControl();
 
     public ConsultationControl() {
         consultations = loadConsultations();
@@ -38,7 +40,10 @@ public class ConsultationControl {
     }
 
     public boolean addConsultation(String id, String patientId, String doctorId, String date, String diagnosis, String notes) {
-        if (getConsultationById(id) != null) return false;
+        if (!isNonEmpty(id) || getConsultationById(id) != null) return false;
+        if (!isNonEmpty(patientId) || patientControl.getPatientById(patientId) == null) return false;
+        if (!isNonEmpty(doctorId) || doctorControl.getDoctorById(doctorId) == null) return false;
+        if (!isNonEmpty(date)) return false;
         consultations.add(new Consultation(id, patientId, doctorId, date, diagnosis, notes));
         saveConsultations();
         return true;
@@ -97,4 +102,6 @@ public class ConsultationControl {
     public int countConsultations() {
         return consultations.size();
     }
+
+    private boolean isNonEmpty(String s) { return s != null && !s.trim().isEmpty(); }
 } 

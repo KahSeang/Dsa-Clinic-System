@@ -45,7 +45,7 @@ public class TreatmentUI {
         System.out.print("Medicine List (semicolon separated): ");
         String medicineList = sc.nextLine();
         boolean success = control.addTreatment(id, consultationId, details, medicineList);
-        System.out.println(success ? "Treatment added." : "Treatment ID already exists.");
+        System.out.println(success ? "Treatment added." : "Invalid data or ID already exists.");
     }
 
     private void updateTreatment() {
