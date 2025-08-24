@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class LoginUI {
+
     private UserControl userControl = new UserControl();
     private PatientControl patientControl = new PatientControl();
     private Scanner sc = new Scanner(System.in);
@@ -30,7 +31,7 @@ public class LoginUI {
             System.out.println("3. Admin Staff");
             System.out.println("4. Exit");
             System.out.print("Choose role: ");
-           String roleChoice = sc.nextLine();
+            String roleChoice = sc.nextLine();
 
             if (roleChoice.equals("1")) {
                 // Doctor: login only
@@ -41,7 +42,9 @@ public class LoginUI {
                     String choice = sc.nextLine();
                     if (choice.equals("1")) {
                         User user = loginWithRole("doctor");
-                        if (user != null) return user;
+                        if (user != null) {
+                            return user;
+                        }
                     } else if (choice.equals("2")) {
                         break;
                     }
@@ -49,17 +52,13 @@ public class LoginUI {
             } else if (roleChoice.equals("2")) {
                 // Patient: login or register
                 while (true) {
-                    System.out.println("1. Login");
-                    System.out.println("2. Register");
-                    System.out.println("3. Back");
-                    System.out.print("Choose: ");
+                    System.out.print("Do you register before (y-Yes | n-No | 0-Back):");
                     String choice = sc.nextLine();
-                    if (choice.equals("1")) {
-                        User user = loginWithRole("patient");
-                        if (user != null) return user;
-                    } else if (choice.equals("2")) {
+                    if (choice.equals("y") || choice.equals("Y")) {
+                        //Find back the records
+                    } else if (choice.equals("n") || choice.equals("N")) {
                         registerPatientUser();
-                    } else if (choice.equals("3")) {
+                    } else if (choice.equals("0")) {
                         break;
                     }
                 }
@@ -72,7 +71,9 @@ public class LoginUI {
                     String choice = sc.nextLine();
                     if (choice.equals("1")) {
                         User user = loginWithRole("admin");
-                        if (user != null) return user;
+                        if (user != null) {
+                            return user;
+                        }
                     } else if (choice.equals("2")) {
                         break;
                     }
@@ -88,13 +89,17 @@ public class LoginUI {
         do {
             System.out.print("Username: ");
             username = sc.nextLine().trim();
-            if (username.isEmpty()) System.out.println("Username cannot be empty.");
+            if (username.isEmpty()) {
+                System.out.println("Username cannot be empty.");
+            }
         } while (username.isEmpty());
         String password;
         do {
             System.out.print("Password: ");
             password = sc.nextLine();
-            if (password.isEmpty()) System.out.println("Password cannot be empty.");
+            if (password.isEmpty()) {
+                System.out.println("Password cannot be empty.");
+            }
         } while (password.isEmpty());
         User user = userControl.login(username, password);
         if (user != null && user.getRole().equalsIgnoreCase(expectedRole)) {
@@ -107,8 +112,12 @@ public class LoginUI {
                 do {
                     System.out.print("New Password (min 6 chars): ");
                     newPassword = sc.nextLine();
-                    if (newPassword.length() < 6) System.out.println("Password too short.");
-                    if (newPassword.equals(UserControl.DEFAULT_PASSWORD)) System.out.println("New password cannot be the default password.");
+                    if (newPassword.length() < 6) {
+                        System.out.println("Password too short.");
+                    }
+                    if (newPassword.equals(UserControl.DEFAULT_PASSWORD)) {
+                        System.out.println("New password cannot be the default password.");
+                    }
                 } while (newPassword.length() < 6 || newPassword.equals(UserControl.DEFAULT_PASSWORD));
                 if (userControl.updatePassword(username, newPassword)) {
                     System.out.println("Password updated successfully.");
@@ -128,22 +137,31 @@ public class LoginUI {
 
     private void registerPatientUser() {
         String username;
+        System.out.println("==============================");
+        System.out.println("Please Register A New Account!");
+        System.out.println("==============================");
         do {
             System.out.print("Username: ");
             username = sc.nextLine().trim();
-            if (username.isEmpty()) System.out.println("Username cannot be empty.");
+            if (username.isEmpty()) {
+                System.out.println("Username cannot be empty.");
+            }
         } while (username.isEmpty());
         String password;
         do {
             System.out.print("Password (min 6 chars): ");
             password = sc.nextLine();
-            if (password.length() < 6) System.out.println("Password too short.");
+            if (password.length() < 6) {
+                System.out.println("Password too short.");
+            }
         } while (password.length() < 6);
         String linkedId;
         do {
             System.out.print("Linked Patient ID: ");
             linkedId = sc.nextLine().trim();
-            if (linkedId.isEmpty()) System.out.println("Patient ID cannot be empty.");
+            if (linkedId.isEmpty()) {
+                System.out.println("Patient ID cannot be empty.");
+            }
         } while (linkedId.isEmpty());
         // Validate patient exists before allowing user account creation
         if (patientControl.getPatientById(linkedId) == null) {
